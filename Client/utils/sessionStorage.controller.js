@@ -1,10 +1,11 @@
-//Funcion para agregar
+
+// Funcion para agregar
 export const addSession = (user) => {
     sessionStorage.setItem('user', JSON.stringify(user))
 }
 
-//Funcion para obtener
+// Funcion para obtener
 export const getSession = () => {
-    return JSON.parse(sessionStorage.getItem('user'))
+    const user = sessionStorage.getItem('user')
+    return user ? JSON.parse(user) : false
 }
-//si existe que lo mande si no existe que mande un false

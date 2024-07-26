@@ -1,58 +1,64 @@
-//Trae todos los productos para mostrar en la tabla
-export const getProducts = async () => {
-    try {
-        const res = await fetch('http://localhost:3000/items/all', {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-        if (!res.ok) {
-            throw new Error('No se pueden obtener los datos')
-        }
-        const pruductos = await res.json()
-        return pruductos
-
-    } catch (error) {
-        console.error('Error al obtener los datos: ', error)
-    }
-}
-
 //Trae la categoría para cargarlas en la lista desplegable:
-export const getCategory = async () => {
+export async function getCategory() {
     try {
-        const res = await fetch('http://localhost:3000/items/categorias', {
+        const response = await fetch('http://localhost:3000/category/all', {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
             }
-        });
-        if (!res.ok) {
-            throw new Error('No se pueden obtener los datos')
+        })
+        if (response.ok) {
+            const data = await response.json()
+            return data
+        } else {
+            console.error('Error al obtener las categorías')
+            return []
         }
-        const categorias = await res.json()
-        return categorias
-
     } catch (error) {
-        console.error('Error al obtener los datos: ', error)
+        console.error('Error al obtener las categorías:', error)
+        return []
     }
 }
 
-//trae desde el back los productos para ser seleccionados por categoria
-export const getProductsByCategory = async (category) => {
+//Trae todos los productos para mostrar en la tabla
+export async function getProducts() {
     try {
-        const res = await fetch(`http://localhost:3000/items/categoria/${category}`, {
+        const response = await fetch('http://localhost:3000/items/all', {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
             }
         });
-        if (!res.ok) {
-            throw new Error('No se pueden obtener los datos')
+        if (response.ok) {
+            return await response.json();
+        } else {
+            console.error('Error al obtener los productos');
+            return [];
         }
-        const productos = await res.json()
-        return productos
     } catch (error) {
-        console.error('Error al obtener los datos: ', error)
+        console.error('Error al obtener los productos:', error);
+        return [];
+    }
+}
+
+//Trae desde el back los productos para ser seleccionados por categoria
+export async function getProductsByCategory(category) {
+
+    try {
+        const response = await fetch(`http://localhost:3000/items/categoria/${category}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        if (response.ok) {
+            return await response.json()
+        } else {
+            console.error('Error al obtener los productos por categoría')
+            return []
+        }
+    } catch (error) {
+        console.error('Error al obtener los productos por categoría:', error)
+        return []
     }
 }

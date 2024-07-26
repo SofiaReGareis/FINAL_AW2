@@ -2,9 +2,11 @@ import { getSession } from "../../utils/sessionStorage.controller.js";
 
 const txtSaludo = document.getElementById('txtSaludo')
 
-const user = getSession('user')
+const user = getSession()
 
-txtSaludo.textContent = user.nombre + ' ' + user.apellido + '!'
+if (user) {
+    txtSaludo.textContent = user.nombre + ' ' + user.apellido + '!'
+}
 
 btnLogout.addEventListener('click', () => {
     sessionStorage.removeItem('user')

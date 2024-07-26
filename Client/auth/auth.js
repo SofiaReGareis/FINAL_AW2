@@ -1,6 +1,7 @@
-const btnLogin = document.getElementById('btnLogin') //click del boton
-import { addSession } from "../utils/sessionStorage.controller.js"
+const btnLogin = document.getElementById('btnLogin');
+import { addSession } from "../utils/sessionStorage.controller.js";
 
+//Autenticacion del usuario para login
 const auth = async ({ name, pass }) => {
     try {
         const response = await fetch('http://localhost:3000/users/login', {
@@ -8,24 +9,28 @@ const auth = async ({ name, pass }) => {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ "username": name, "pass": pass })
-        })
+            body: JSON.stringify({ "user": name, "password": pass })
+        });
 
         if (!response.ok) {
-            throw new Error("Error en la petición")
-            //no iniciar sesion, actualmente ingresa a la pagina sigueinte pero no se guarda correctamente el ss
+            throw new Error("Error en la petición");
         }
 
-        const user = await response.json()
+        const user = await response.json();
 
-        return user
+        if (!user.nombre) {  // Check if user data was received
+            throw new Error("Autenticación fallida");
+        }
+
+        return user;
 
     } catch (error) {
-        console.error("Error:", error)
-        alert("Error en la autenticación: " + error.message)
+        console.error("Error:", error);
+        alert("Error en la autenticación: " + error.message);
     }
 }
 
+//Inicio de sesion con alert
 btnLogin.addEventListener('click', async (event) => {
     event.preventDefault(); // Prevenir el comportamiento por defecto del botón de submit
 
@@ -58,11 +63,10 @@ btnLogin.addEventListener('click', async (event) => {
     } catch (error) {
         console.error("Error durante la autenticación:", error);
 
-        // Diferenciar tipos de errores si es posible
         if (error.message.includes('NetworkError')) {
             alert("Error de red. Por favor, verifique su conexión a Internet e inténtelo de nuevo.");
         } else {
             alert("Hubo un error durante la autenticación. Por favor, inténtelo de nuevo.");
         }
     }
-})
+});
