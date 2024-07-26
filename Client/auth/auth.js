@@ -1,6 +1,7 @@
-const btnLogin = document.getElementById('btnLogin') //click del boton
-import { addSession } from "../utils/sessionStorage.controller.js"
+const btnLogin = document.getElementById('btnLogin');
+import { addSession } from "../utils/sessionStorage.controller.js";
 
+//Autenticacion del usuario para login
 const auth = async ({ name, pass }) => {
     try {
         const response = await fetch('http://localhost:3000/users/login', {
@@ -8,61 +9,64 @@ const auth = async ({ name, pass }) => {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ "username": name, "pass": pass })
-        })
+            body: JSON.stringify({ "user": name, "password": pass })
+        });
 
         if (!response.ok) {
-            throw new Error("Error en la petición")
-            //no iniciar sesion, actualmente ingresa a la pagina sigueinte pero no se guarda correctamente el ss
+            throw new Error("Error en la petición");
         }
 
-        const user = await response.json()
+        const user = await response.json();
 
-        return user
+        if (!user.nombre) {  // Check if user data was received
+            throw new Error("Autenticación fallida");
+        }
+
+        return user;
 
     } catch (error) {
-        console.error("Error:", error)
-        alert("Error en la autenticación: " + error.message)
+        console.error("Error:", error);
+        alert("Error en la autenticación: " + error.message);
     }
 }
 
+//Inicio de sesion con alert
 btnLogin.addEventListener('click', async (event) => {
     event.preventDefault(); // Prevenir el comportamiento por defecto del botón de submit
 
     try {
-        const nameField = document.getElementById('txtName')
-        const passField = document.getElementById('txtPass')
+        const nameField = document.getElementById('txtName');
+        const passField = document.getElementById('txtPass');
 
         if (!nameField || !passField) {
-            alert('Error interno: Campos de entrada no encontrados.')
+            alert('Error interno: Campos de entrada no encontrados.');
             return;
         }
 
-        const name = nameField.value.trim()
-        const pass = passField.value.trim()
+        const name = nameField.value.trim();
+        const pass = passField.value.trim();
 
         if (!name || !pass) {
-            alert('Hay campos incompletos')
+            alert('Hay campos incompletos');
             return;
         }
 
-        const user = await auth({ name, pass })
+        const user = await auth({ name, pass });
 
         if (!user) {
-            alert('Autenticación fallida. Por favor, verifique sus credenciales.')
+            alert('Autenticación fallida. Por favor, verifique sus credenciales.');
             return;
         }
 
-        addSession(user)
-        window.location.href = "../pages/home/"
+        addSession(user);
+        window.location.href = "../pages/home/";
     } catch (error) {
-        console.error("Error durante la autenticación:", error)
-
+        console.error("Error durante la autenticación:", error);
 
         if (error.message.includes('NetworkError')) {
-            alert("Error de red. Por favor, verifique su conexión a Internet e inténtelo de nuevo.")
+            alert("Error de red. Por favor, verifique su conexión a Internet e inténtelo de nuevo.");
         } else {
-            alert("Hubo un error durante la autenticación. Por favor, inténtelo de nuevo.")
+            alert("Hubo un error durante la autenticación. Por favor, inténtelo de nuevo.");
         }
     }
-})
+});

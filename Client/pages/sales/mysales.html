@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Compras</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-lime-200 text-yellow-600 flex items-center justify-center min-h-screen">
+    <div class="max-w-4xl w-full bg-white p-8 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-bold text-center mb-4">Mis Compras</h2>
+        <table class="min-w-full divide-y divide-gray-200 mt-4">
+            <thead>
+                <tr>
+                    <th class="py-2 px-4 text-left">Fecha</th>
+                    <th class="py-2 px-4 text-left">Productos</th>
+                    <th class="py-2 px-4 text-left">Cantidades</th>
+                    <th class="py-2 px-4 text-left">Total</th>
+                    <th class="py-2 px-4 text-left">Dirección</th>
+                </tr>
+            </thead>
+            <tbody id="listSales" class="bg-white divide-y divide-gray-200"></tbody>
+        </table>
+        <div class="text-right mt-4">
+            <a href="../home/index.html" class="text-blue-500 hover:underline">Volver al inicio</a>
+        </div>
+    </div>
+    <script src="mysales.controller.js" type="module"></script>
+</body>
+
+</html>
